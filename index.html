@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Product Price Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Playfair Display', serif; background: #f8f9fa; }
+    .navbar { background: #ff7171 !important; }
+    .navbar-brand, .nav-link { color: #fff !important; }
+    .nav-link.active { font-weight: bold; text-decoration: underline; }
+    .card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .section-title { color: #ff7171; font-weight: 600; text-align: center; margin: 18px 0 6px; }
+    .result-field { background: #fff8f8; }
+    h3.page-title { text-align: center; margin-bottom: 18px; font-size: 1.1rem; color: #555; }
+    .docs ul { line-height: 2; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark mb-3">
+  <div class="container-fluid">
+    <span class="navbar-brand">Product Price Calculator</span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="#" onclick="showTab('roposo',this)">Roposo</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showTab('ecommerce',this)">E-Commerce</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showTab('glowroad',this)">Glowroad</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showTab('docs',this)">Docs</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ROPOSO -->
+  <div id="tab-roposo">
+    <h3 class="page-title">Enter your Values Here</h3>
+    <div class="card p-4 mb-3">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Product Sourcing Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="r_psc" placeholder="0" oninput="calcRoposo()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Orders :</span>
+            <input type="number" class="form-control" id="r_to" placeholder="0" oninput="calcRoposo()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Selling Price :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="r_sp" placeholder="0" oninput="calcRoposo()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="r_ac" placeholder="0" oninput="calcRoposo()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Order Cancellation Rate :</span>
+            <input type="number" class="form-control" id="r_ocr" placeholder="0" oninput="calcRoposo()">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Percentage :</span>
+            <input type="number" class="form-control" id="r_rto" placeholder="0" oninput="calcRoposo()">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title">Roposo</h3>
+      <hr>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Net Order After Cancellation :</span>
+            <input disabled type="number" class="form-control result-field" id="r_noac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Delivered Order :</span>
+            <input disabled type="number" class="form-control result-field" id="r_do" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Order :</span>
+            <input disabled type="number" class="form-control result-field" id="r_rtoo" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Eligible for RTO Cost :</span>
+            <input disabled type="number" class="form-control result-field" id="r_ertoc" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="r_tac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Average Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="r_aac" value="0">
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net RTO Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="r_nrtoc" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit/Product :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="r_nppp" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Revenue :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="r_rev" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="r_np" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Profit % :</span>
+            <input disabled type="number" class="form-control result-field" id="r_pp" value="0">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">ROI :</span>
+            <input disabled type="number" class="form-control result-field" id="r_roi" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECOMMERCE -->
+  <div id="tab-ecommerce" style="display:none">
+    <h3 class="page-title">Enter your Values Here</h3>
+    <div class="card p-4 mb-3">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Product Sourcing Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="e_psc" placeholder="0" oninput="calcEcom()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Orders :</span>
+            <input type="number" class="form-control" id="e_to" placeholder="0" oninput="calcEcom()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Freight Charges :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="e_fc" placeholder="0" oninput="calcEcom()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Charges :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="e_rtoc" placeholder="0" oninput="calcEcom()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Selling Price :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="e_sp" placeholder="0" oninput="calcEcom()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="e_ac" placeholder="0" oninput="calcEcom()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Order Cancellation Rate :</span>
+            <input type="number" class="form-control" id="e_ocr" placeholder="0" oninput="calcEcom()">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Percentage :</span>
+            <input type="number" class="form-control" id="e_rto" placeholder="0" oninput="calcEcom()">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title">E-Commerce</h3>
+      <hr>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Net Order After Cancellation :</span>
+            <input disabled type="number" class="form-control result-field" id="e_noac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Delivered Order :</span>
+            <input disabled type="number" class="form-control result-field" id="e_do" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Order :</span>
+            <input disabled type="number" class="form-control result-field" id="e_rtoo" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Freight Charges :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_tfc" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_tac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Average Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_aac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">COD Remittance :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_codr" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Net RTO Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_nrtoc" value="0">
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit/Product :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_nppp" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit (Real) :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_npr" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Revenue :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_rev" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="e_np" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Profit % :</span>
+            <input disabled type="number" class="form-control result-field" id="e_pp" value="0">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">ROI :</span>
+            <input disabled type="number" class="form-control result-field" id="e_roi" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOWROAD -->
+  <div id="tab-glowroad" style="display:none">
+    <h3 class="page-title">Enter your Values Here</h3>
+    <div class="card p-4 mb-3">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Product Sourcing Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="g_psc" placeholder="0" oninput="calcGlowroad()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Orders :</span>
+            <input type="number" class="form-control" id="g_to" placeholder="0" oninput="calcGlowroad()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Selling Price :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="g_sp" placeholder="0" oninput="calcGlowroad()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input type="number" class="form-control" id="g_ac" placeholder="0" oninput="calcGlowroad()">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Order Cancellation Rate :</span>
+            <input type="number" class="form-control" id="g_ocr" placeholder="0" oninput="calcGlowroad()">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Percentage :</span>
+            <input type="number" class="form-control" id="g_rto" placeholder="0" oninput="calcGlowroad()">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title">Glowroad</h3>
+      <hr>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Net Order After Cancellation :</span>
+            <input disabled type="number" class="form-control result-field" id="g_noac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Delivered Order :</span>
+            <input disabled type="number" class="form-control result-field" id="g_do" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">RTO Order :</span>
+            <input disabled type="number" class="form-control result-field" id="g_rtoo" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Eligible for RTO Cost :</span>
+            <input disabled type="number" class="form-control result-field" id="g_ertoc" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Total Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="g_tac" value="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Average Ad Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="g_aac" value="0">
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net RTO Cost :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="g_nrtoc" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit/Product :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="g_nppp" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Revenue :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="g_rev" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Net Profit :</span>
+            <span class="input-group-text">₹</span>
+            <input disabled type="number" class="form-control result-field" id="g_np" value="0">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">Profit % :</span>
+            <input disabled type="number" class="form-control result-field" id="g_pp" value="0">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text">ROI :</span>
+            <input disabled type="number" class="form-control result-field" id="g_roi" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCS -->
+  <div id="tab-docs" style="display:none" class="docs">
+    <div class="card p-4 mb-3">
+      <h3 class="section-title">ROPOSO</h3><hr>
+      <ul>
+        <li><b>Net Order After Cancellation:</b> Total Orders × (100 − Cancellation Rate) / 100</li>
+        <li><b>Delivered Order:</b> Net Orders × (100 − RTO%) / 100</li>
+        <li><b>RTO Order:</b> Net Orders × RTO%</li>
+        <li><b>Total Ad Cost:</b> Total Orders × Ad Cost per product</li>
+        <li><b>Average Ad Cost:</b> Total Ad Cost / Delivered Orders</li>
+        <li><b>Net RTO Cost:</b> Eligible RTO Orders × ₹72 (Roposo avg RTO charge)</li>
+        <li><b>Average RTO Cost:</b> Net RTO Cost / Delivered Orders</li>
+        <li><b>Net Profit/Product:</b> Selling Price − (Avg RTO Cost + Avg Ad Cost + Sourcing Cost)</li>
+        <li><b>Revenue:</b> Total Orders × Selling Price</li>
+        <li><b>Net Profit:</b> Delivered Orders × Net Profit/Product</li>
+        <li><b>Profit %:</b> (Net Profit / Revenue) × 100</li>
+        <li><b>ROI:</b> Net Profit / Total Ad Cost</li>
+      </ul>
+      <h3 class="section-title">E-COMMERCE</h3><hr>
+      <ul>
+        <li><b>Net Order After Cancellation:</b> Total Orders × (100 − Cancellation Rate) / 100</li>
+        <li><b>RTO Orders:</b> Net Orders × RTO%</li>
+        <li><b>Delivered Orders:</b> Net Orders − RTO Orders</li>
+        <li><b>Total Freight Charges:</b> Net Orders × Freight Charges</li>
+        <li><b>Total Ad Cost:</b> Total Orders × Ad Cost</li>
+        <li><b>Average Ad Cost:</b> Total Ad Cost / Delivered Orders</li>
+        <li><b>COD Remittance:</b> Delivered Orders × Selling Price</li>
+        <li><b>Net RTO Cost:</b> RTO Orders × RTO Charges</li>
+        <li><b>Net Profit/Product:</b> Selling Price − (Avg RTO + Avg Ad + Sourcing + Avg Freight)</li>
+        <li><b>Net Profit (Real):</b> Net Profit − (RTO Orders × Sourcing Cost)</li>
+        <li><b>Revenue:</b> Total Orders × Selling Price</li>
+        <li><b>Profit %:</b> (Net Profit / Revenue) × 100</li>
+        <li><b>ROI:</b> Net Profit / (Total Freight + Total Ad + Total Sourcing + Net RTO Cost)</li>
+      </ul>
+      <h3 class="section-title">GLOWROAD</h3><hr>
+      <ul>
+        <li><b>Eligible for RTO Cost:</b> If RTO% ≤ 40% → 0. If RTO% > 40% → Net Orders × (RTO% − 40%)</li>
+        <li><b>Net RTO Cost:</b> Eligible RTO Cost × ₹70 (Glowroad avg RTO charge)</li>
+        <li><b>All other formulas same as Roposo</b></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showTab(name, el) {
+  ['roposo','ecommerce','glowroad','docs'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = 'none';
+  });
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('tab-'+name).style.display = 'block';
+  if(el) el.classList.add('active');
+  event.preventDefault();
+}
+
+function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function s(id, val) {
+  document.getElementById(id).value = (isNaN(val) || !isFinite(val)) ? '0' : parseFloat(val.toFixed(2));
+}
+
+function calcRoposo() {
+  var to=v('r_to'), sp=v('r_sp'), ac=v('r_ac'), ocr=v('r_ocr'), rtop=v('r_rto'), psc=v('r_psc');
+  var noac = to - to*ocr/100;
+  var rtoo = noac * rtop/100;
+  var del  = noac - rtoo;
+  var tac  = to * ac;
+  var aac  = del>0 ? tac/del : 0;
+  var nrtoc= rtoo * 72;
+  var artoc= del>0 ? nrtoc/del : 0;
+  var nppp = sp - (artoc + aac + psc);
+  var np   = del * nppp;
+  var rev  = to * sp;
+  var pp   = rev>0 ? np/rev*100 : 0;
+  var roi  = tac>0 ? np/tac : 0;
+  s('r_noac',noac); s('r_do',del); s('r_rtoo',rtoo); s('r_ertoc',rtoo);
+  s('r_tac',tac); s('r_aac',aac); s('r_nrtoc',nrtoc); s('r_nppp',nppp);
+  s('r_rev',rev); s('r_np',np); s('r_pp',pp); s('r_roi',roi);
+}
+
+function calcEcom() {
+  var to=v('e_to'), sp=v('e_sp'), ac=v('e_ac'), ocr=v('e_ocr'), rtop=v('e_rto'), psc=v('e_psc'), fc=v('e_fc'), rtoc=v('e_rtoc');
+  var noac = to - to*ocr/100;
+  var rtoo = noac * rtop/100;
+  var del  = noac - rtoo;
+  var tfc  = noac * fc;
+  var tac  = to * ac;
+  var aac  = del>0 ? tac/del : 0;
+  var nrtoc= rtoo * rtoc;
+  var artoc= del>0 ? nrtoc/del : 0;
+  var afrc = del>0 ? tfc/del : 0;
+  var nppp = sp - (artoc + aac + psc + afrc);
+  var np   = del * nppp;
+  var npr  = np - rtoo*psc;
+  var rev  = to * sp;
+  var pp   = rev>0 ? np/rev*100 : 0;
+  var tsc  = noac * psc;
+  var netcost = tfc+tac+tsc+nrtoc;
+  var roi  = netcost>0 ? np/netcost : 0;
+  var codr = del * sp;
+  s('e_noac',noac); s('e_do',del); s('e_rtoo',rtoo); s('e_tfc',tfc);
+  s('e_tac',tac); s('e_aac',aac); s('e_codr',codr); s('e_nrtoc',nrtoc);
+  s('e_nppp',nppp); s('e_npr',npr); s('e_rev',rev);
+  s('e_np',np); s('e_pp',pp); s('e_roi',roi);
+}
+
+function calcGlowroad() {
+  var to=v('g_to'), sp=v('g_sp'), ac=v('g_ac'), ocr=v('g_ocr'), rtop=v('g_rto'), psc=v('g_psc');
+  var noac = to - to*ocr/100;
+  var rtoo = noac * rtop/100;
+  var del  = noac - rtoo;
+  var tac  = to * ac;
+  var aac  = del>0 ? tac/del : 0;
+  var elig = rtop>40 ? noac*(rtop-40)/100 : 0;
+  var nrtoc= elig * 70;
+  var artoc= del>0 ? nrtoc/del : 0;
+  var nppp = sp - (artoc + aac + psc);
+  var np   = del * nppp;
+  var rev  = to * sp;
+  var pp   = rev>0 ? np/rev*100 : 0;
+  var roi  = tac>0 ? np/tac : 0;
+  s('g_noac',noac); s('g_do',del); s('g_rtoo',rtoo); s('g_ertoc',elig);
+  s('g_tac',tac); s('g_aac',aac); s('g_nrtoc',nrtoc); s('g_nppp',nppp);
+  s('g_rev',rev); s('g_np',np); s('g_pp',pp); s('g_roi',roi);
+}
+</script>
+</body>
+</html>
